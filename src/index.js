@@ -14,24 +14,26 @@ const getItemTemplate = ({ country }) => `
       <h1 class="country-title">${country.name.official}}</h1>
     </li>`;
 
-const getInfoOffItemTemplate = ({ country }) => `
-  <p class="country-capital"><b>Capital</b>: ${country.capital}</p>
-  <p class="country-population"><b>Population</b>: ${country.population}</p>
-  <p class="country-languages"><b>Languages</b>: ${country.languages} </p></li>`;
+const getInfoOffItemTemplate = ({ capital, population, languages }) => `
+  <p class="country-capital"><b>Capital</b>: ${capital}</p>
+  <p class="country-population"><b>Population</b>: ${population}</p>
+  <p class="country-languages"><b>Languages</b>: ${languages} </p></li>`;
 
-let countres = [];
+let countres = {};
 
-fetch(`${URL}v3.1/name/sw`);
-fetch(
-  `${URL}v2/{service}?fields=name.official,capital,population,flags.svg,languages`
-)
+fetch(`${URL}v3.1/name/sw`)
+  // fetch(
+  //   `${URL}v2/{service}?fields=name.official,capital,population,flags.svg,languages`
+  // )
   .then(resp => resp.json())
   .then(coutres => {
     const markup = getItemTemplate(coutres);
     if (countres.length === 1) {
-      const markupInfo = getInfoOffItemTemplate(coutres);
+      const markupInfo = getInfoOffItemTemplate(countres[0]);
     }
+
     console.log(coutres);
+    console.log(markup);
     console.log(markupInfo);
   })
   .catch(error => {
