@@ -12,10 +12,12 @@ const getItemTemplate = ({ flags, name }) =>
       <h1 class="country-title">${name.official}</h1>
     </li>`;
 
-const getInfoOffItemTemplate = ({ name, capital, population, languages }) => `
+const getInfoOffItemTemplate = ({ capital, population, languages }) => `
   <p class="country-capital"><b>Capital</b>: ${capital}</p>
   <p class="country-population"><b>Population</b>: ${population}</p>
-  <p class="country-languages"><b>Languages</b>: ${languages} </p></li>
+  <p class="country-languages"><b>Languages</b>: ${Object.values(
+    languages
+  ).join(' ,')} </p></li>
   `;
 
 const clearName = () => {
