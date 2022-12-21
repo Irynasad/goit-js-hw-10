@@ -5,15 +5,14 @@ import debounce from 'lodash.debounce';
 var debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
 import { fetchCountries } from './fetchCountries';
-const URL = 'https://restcountries.com/v3.1/name/';
 
-const getItemTemplate = ({ flags, name }) => `
-    <li class="country-item" data-id=${name}>
+const getItemTemplate = ({ flags, name }) =>
+  ` <li class="country-item" data-id=${name}>
       <img src="${flags.svg}" alt="Flag of ${name.official} width="30" height="20">
       <h1 class="country-title">${name.official}</h1>
     </li>`;
 
-const getInfoOffItemTemplate = ({ capital, population, languages }) => `
+const getInfoOffItemTemplate = ({ name, capital, population, languages }) => `
   <p class="country-capital"><b>Capital</b>: ${capital}</p>
   <p class="country-population"><b>Population</b>: ${population}</p>
   <p class="country-languages"><b>Languages</b>: ${languages} </p></li>
@@ -52,15 +51,6 @@ const onSearch = event => {
   if (!name) {
     return;
   }
-  // fetch(
-  //   `${URL}${name}?fields=name,capital,population,languages,flags`
-  // )
-  //   .then(response => {
-  //     if (!response.ok) {
-  //       throw new Error(response.status);
-  //     }
-  //     return response.json();
-  //   })
   fetchCountries(name)
     .then(data => {
       console.log(data);
@@ -86,16 +76,5 @@ const onSearch = event => {
     })
     .finally();
 };
-
-// function fetchCountries(countryName) {
-//   return fetch(
-//     `${URL}${countryName}?fields=name,capital,population,languages,flags`
-//   ).then(response => {
-//     if (!response.ok) {
-//       throw new Error(response.status);
-//     }
-//     return response.json();
-//   });
-// }
 
 refs.input.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
