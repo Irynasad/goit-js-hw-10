@@ -32,7 +32,7 @@ const refs = {
 let countries = [];
 
 const renderList = () => {
-  // console.log(countries);
+  console.log(countries);
   const listOfCountry = countries.map(getItemTemplate);
   refs.list.innerHTML = '';
   refs.list.insertAdjacentHTML('beforeend', listOfCountry.join(''));
@@ -47,23 +47,24 @@ const renderInfo = () => {
 const onSearch = event => {
   event.preventDefault();
   let name = event.target.value.trim();
+  clearName();
 
   if (!name) {
-    clearName();
     return;
   }
-
-  fetch(`https://restcountries.com/v3.1/name/${name}`)
-    // fetch(
-    //   `https://restcountries.com/v2/all?fields=${name.official},${capital},${population},${flags.svg},${languages}`
-    // )
-    .then(resp => resp.json())
+  // fetch(
+  //   `https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,languages,flags`
+  // )
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error(response.status);
+  //     }
+  //     return response.json();
+  //   })
+  fetchCountries(name)
     .then(data => {
       console.log(data);
       countries = data;
-      console.log(countries.length);
-      // renderList();
-      // renderInfo();
       if (countries.length >= 10) {
         return Notiflix.Notify.info(
           `Too many matches found. Please enter a more specific name.`
@@ -79,11 +80,22 @@ const onSearch = event => {
         return;
       }
     })
-    .catch(() => {
-      clearName();
-      return Notiflix.Notify.failure(
-        `Oops, there is no country with that name`
-      );
-    });
+    .catch(error => {
+      console.log(error);
+      Notiflix.Notify.failure(`Oops, there is no country with that name`);
+    })
+    .finally();
 };
+
+function fetchCountries(countryName) {
+  fetch(
+    `https://restcountries.com/v3.1/name/${countryName}?fields=name,capital,population,languages,flags`
+  ).then(response => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  });
+}
+
 refs.input.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
