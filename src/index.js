@@ -4,8 +4,8 @@ import 'notiflix/dist/notiflix-3.2.5.min.css';
 import debounce from 'lodash.debounce';
 var debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
-// import { fetchCountries } from './fetchCountries';
-// const URL = 'https://restcountries.com/';
+import { fetchCountries } from './fetchCountries';
+const URL = 'https://restcountries.com/v3.1/name/';
 
 const getItemTemplate = ({ flags, name }) => `
     <li class="country-item" data-id=${name}>
@@ -53,7 +53,7 @@ const onSearch = event => {
     return;
   }
   // fetch(
-  //   `https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,languages,flags`
+  //   `${URL}${name}?fields=name,capital,population,languages,flags`
   // )
   //   .then(response => {
   //     if (!response.ok) {
@@ -87,15 +87,15 @@ const onSearch = event => {
     .finally();
 };
 
-function fetchCountries(countryName) {
-  fetch(
-    `https://restcountries.com/v3.1/name/${countryName}?fields=name,capital,population,languages,flags`
-  ).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
-    }
-    return response.json();
-  });
-}
+// function fetchCountries(countryName) {
+//   return fetch(
+//     `${URL}${countryName}?fields=name,capital,population,languages,flags`
+//   ).then(response => {
+//     if (!response.ok) {
+//       throw new Error(response.status);
+//     }
+//     return response.json();
+//   });
+// }
 
 refs.input.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
