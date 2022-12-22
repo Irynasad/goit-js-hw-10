@@ -30,16 +30,14 @@ const refs = {
   list: document.querySelector('.country-list'),
   div: document.querySelector('.country-info'),
 };
-let countries = [];
 
-const renderList = () => {
-  console.log(countries);
+const renderList = countries => {
   const listOfCountry = countries.map(getItemTemplate);
   refs.list.innerHTML = '';
   refs.list.insertAdjacentHTML('beforeend', listOfCountry.join(''));
 };
 
-const renderInfo = () => {
+const renderInfo = countries => {
   const infoOfCountry = countries.map(getInfoOffItemTemplate);
   refs.div.innerHTML = '';
   refs.div.insertAdjacentHTML('beforeend', infoOfCountry.join(''));
@@ -55,20 +53,18 @@ const onSearch = event => {
   }
   fetchCountries(name)
     .then(data => {
-      console.log(data);
-      countries = data;
-      if (countries.length >= 10) {
+      if (data.length >= 10) {
         return Notiflix.Notify.info(
           `Too many matches found. Please enter a more specific name.`
         );
       }
-      if (countries.length > 2 && countries.length < 10) {
-        renderList();
+      if (data.length > 2 && data.length < 10) {
+        renderList(data);
         return;
       }
-      if (countries.length === 1) {
-        renderList();
-        renderInfo();
+      if (data.length === 1) {
+        renderList(data);
+        renderInfo(data);
         return;
       }
     })
